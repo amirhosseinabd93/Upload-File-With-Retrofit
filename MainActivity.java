@@ -85,22 +85,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private byte[] getBytes(InputStream is) throws IOException {
-        ByteArrayOutputStream byteBuff = new ByteArrayOutputStream();
-
-        int buffSize = 1024;
-        byte[] buff = new byte[buffSize];
-
-        int len = 0;
-        while ((len = is.read(buff)) != -1) {
-            byteBuff.write(buff, 0, len);
+       try {
+            byte[] buff = new byte[inputStream.available()];
+            while (inputStream.read(buff) > 0) ;
+            return buff;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        return byteBuff.toByteArray();
+        return null;
     }
 
     private String getFileExtension(Uri uri) {
-        ContentResolver cr = this.getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cr.getType(uri));
+        return mime.getSingletone().getExtensionFromMimeType(getContentResolver().getType(uri));
     }
 }
